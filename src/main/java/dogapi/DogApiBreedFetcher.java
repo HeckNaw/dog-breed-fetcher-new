@@ -24,7 +24,7 @@ public class DogApiBreedFetcher implements BreedFetcher {
      * @throws BreedNotFoundException if the breed does not exist (or if the API call fails for any reason)
      */
     @Override
-    public List<String> getSubBreeds(String breed) {
+    public List<String> getSubBreeds(String breed) throws BreedNotFoundException {
         String url = "https://dog.ceo/api/breed/" + breed.toLowerCase() + "/list";
         Request request = new Request.Builder()
                 .url(url)
@@ -35,9 +35,6 @@ public class DogApiBreedFetcher implements BreedFetcher {
                 throw new BreedNotFoundException("API request failed with code: " + response.code());
             }
             String responseBody = response.body().string();
-            if (responseBody == null) {
-                throw new BreedNotFoundException("Received empty response");
-            }
 
             JSONObject jsonResponse = new JSONObject(responseBody);
             JSONArray subBreedsArray = jsonResponse.getJSONArray("message");
